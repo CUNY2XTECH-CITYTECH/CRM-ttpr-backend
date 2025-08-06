@@ -12,6 +12,7 @@ app.use(cors())
 app.use(express.json())
 // routes
 app.use('/api/user',UserRouter)
+
 app.listen(port, () => {
   console.log(`backend is running at localhost:${port}`)
 })
