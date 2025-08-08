@@ -9,18 +9,18 @@ export const createUsers = catchAsync(async(req,res,next) => {
   const pwd = await argon2.hash(req.body.password)
   const data = { ...req.body, ...{ password: pwd } }
   const user = await User.create(data)
-  res.status(200).json({
-    data: user
-  })
+  res.status(200).json(user)
   }
   else{
-   res.status(201).json({message:`user already exists with email ${req.body.email}`})
+    const {verified,role,locked} = exist[0]
+   res.status(201).json({message:`user already exists with email ${req.body.email}`,role:role,verified:verified,locked:locked})
   }
  }
 )
 
 export const getUsers = catchAsync(async (req, res, next) => {
   const user = await User.find()
+  console.log(req.headers.authorization,'lol')
   res.status(200).json({
     data: user
   })
