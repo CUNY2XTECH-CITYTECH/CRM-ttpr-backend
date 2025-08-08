@@ -1,16 +1,26 @@
 // logic for fetching and posting
 import User from '../models/User.js'
 import { catchAsync } from '../utils/commonFunctions.js'
-
-export const createUsers = catchAsync(async (req, res, next) => {
-  const user = await User.create(req.body)
-  res.status(200).json({
-    data: user
-  })
-}
+import * as argon2 from 'argon2'
+export const createUsers = catchAsync(async(req,res,next) => {
+  // check if user with same email already exists
+  const exist = await User.find({email:req.body.email})
+  if(exist.length==0){
+  const pwd = await argon2.hash(req.body.password)
+  const data = { ...req.body, ...{ password: pwd } }
+  const user = await User.create(data)
+  res.status(200).json(user)
+  }
+  else{
+    const {verified,role,locked} = exist[0]
+   res.status(201).json({message:`user already exists with email ${req.body.email}`,role:role,verified:verified,locked:locked})
+  }
+ }
 )
+
 export const getUsers = catchAsync(async (req, res, next) => {
   const user = await User.find()
+  console.log(req.headers.authorization,'lol')
   res.status(200).json({
     data: user
   })
@@ -35,7 +45,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 export const deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.deleteOne(req.body)
   res.status(200).json({
-    deleted:true 
+    deleted: true
   })
 
 })
