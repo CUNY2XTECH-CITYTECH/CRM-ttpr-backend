@@ -4,6 +4,7 @@ import cors from 'cors'
 import connection from './config/connection.js'
 import UserRouter from './routes/userRoute.js'
 import LoginRouter from './routes/loginRoute.js'
+import interestRouter from './routes/interestRoute.js'
 import cookieParser from 'cookie-parser'
 import { checkToken } from './utils/commonFunctions.js'
 const app = express()
@@ -17,6 +18,7 @@ app.use(express.json())
 // routes
 app.use('/api/user',checkToken,UserRouter)
 app.use('/api/login',LoginRouter)
+app.use('/api/interests',interestRouter)
 app.listen(port, () => {
   console.log(`backend is running at localhost:${port}`)
 })
