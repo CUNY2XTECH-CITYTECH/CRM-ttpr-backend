@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { loginAttempt } from "../controllers/loginController.js";
+import { loginAttempt, logoutAttempt } from "../controllers/loginController.js";
 
 const LoginRouter = Router()
-LoginRouter.post('/',loginAttempt)
+LoginRouter.post('/login',loginAttempt)
+LoginRouter.get('/logout',logoutAttempt)
 export default LoginRouter
 
