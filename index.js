@@ -5,6 +5,8 @@ import connection from './config/connection.js'
 import UserRouter from './routes/userRoute.js'
 import LoginRouter from './routes/loginRoute.js'
 import RefreshRouter from './routes/refreshRoute.js'
+import CompanyRouter from './routes/companyRoute.js'
+import InternshipRouter from './routes/internshipRoute.js'
 import cookieParser from 'cookie-parser'
 import { checkToken } from './middlewares/middleware.js'
 const app = express()
@@ -19,7 +21,8 @@ app.use(express.json())
 app.use('/api/users',checkToken,UserRouter)
 app.use('/api/auth',LoginRouter)
 app.use('/api/refresh',RefreshRouter)
-
+app.use('/api/internship',InternshipRouter)
+app.use('/api/company',CompanyRouter)
 app.listen(port, () => {
   console.log(`backend is running at localhost:${port}`)
 })
