@@ -3,7 +3,7 @@ import { createUsers, getUsers, getOneUser,updateUser, deleteUser } from "../con
 
 const UserRouter = Router()
 UserRouter.get('/',getUsers)
-UserRouter.post('/id',getOneUser)
+UserRouter.get('/me',getOneUser)
 UserRouter.post('/create',createUsers)
 UserRouter.post('/update',updateUser)
 UserRouter.delete('/delete',deleteUser)
