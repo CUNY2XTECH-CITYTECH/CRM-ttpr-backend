@@ -19,7 +19,7 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET_KEY))
 app.use(express.json())
 // routes
-app.use('/api/users', checkToken, UserRouter)
+app.use('/api/users',  UserRouter)
 app.use('/api/adminProfile', checkToken,AdminProfileRouter )
 app.use('/api/auth', LoginRouter)
 app.use('/api/refresh', RefreshRouter)
