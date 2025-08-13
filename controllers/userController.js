@@ -4,6 +4,7 @@ import { catchAsync } from '../utils/commonFunctions.js'
 import * as argon2 from 'argon2'
 export const createUsers = catchAsync(async (req, res, next) => {
   // check if user with same email already exists
+   console.log('user account',req.body)
   const exist = await User.find({ email: req.body.email })
   if (exist.length == 0) {
     const pwd = await argon2.hash(req.body.password)

@@ -15,7 +15,6 @@ export const checkToken = (req, res, next) => {
         .json({ message: "TokenExpired", data: { userId: decoded.userId } })
     }
     else {
-      console.log('decoded', decoded)
       req.UserData = decoded
       next()
     }

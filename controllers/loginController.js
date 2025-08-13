@@ -2,7 +2,6 @@ import LoginCredentials from '../models/Login.js'
 import User from '../models/User.js'
 import { catchAsync, generateTokenPair } from '../utils/commonFunctions.js'
 import * as argon2 from 'argon2'
-import jwt from 'jsonwebtoken'
 
 export const loginAttempt = catchAsync(async (req, res, next) => {
   const { email: req_email, password: req_pwd } = req.body;
