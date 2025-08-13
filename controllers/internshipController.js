@@ -65,6 +65,7 @@ export const updateInternship = catchAsync(async (req, res, next) => {
 })
 
 export const deleteInternship = catchAsync(async (req, res, next) => {
+  console.log('I am here')
   const internship = await Internship.findByIdAndDelete(req.params.id)
   
   if (!internship) {

@@ -3,10 +3,10 @@ import {createInternship, getInternship, getOneInternship,updateInternship, dele
 
 const InternshipRouter = Router()
 InternshipRouter.get('/',getInternship)
-InternshipRouter.post('/id',getOneInternship)
+InternshipRouter.get('/:id', getOneInternship)
 InternshipRouter.post('/create',createInternship)
-InternshipRouter.post('/update',updateInternship)
-InternshipRouter.delete('/delete',deleteInternship)
+InternshipRouter.patch('/:id',updateInternship)
+InternshipRouter.delete('/:id',deleteInternship)
 
 export default InternshipRouter;
     

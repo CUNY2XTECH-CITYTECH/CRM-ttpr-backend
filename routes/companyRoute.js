@@ -1,11 +1,11 @@
 import { Router } from "express";
-import {createCompany, getCompany, getOneCompany,updateCompany, deleteCompany} from "../controllers/companyController.js";
+import {createCompany, getCompanies, getCompany,updateCompany, deleteCompany} from "../controllers/companyController.js";
 
 const CompanyRouter = Router()
-CompanyRouter.get('/',getCompany)
-CompanyRouter.post('/id',getOneCompany)
+CompanyRouter.get('/',getCompanies)
+CompanyRouter.get('/:id', getCompany)
 CompanyRouter.post('/create',createCompany)
-CompanyRouter.post('/update',updateCompany)
-CompanyRouter.delete('/delete',deleteCompany)
+CompanyRouter.patch('/:id',updateCompany)
+CompanyRouter.delete('/:id',deleteCompany)
 export default CompanyRouter;
  
