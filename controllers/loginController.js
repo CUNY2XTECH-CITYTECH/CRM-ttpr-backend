@@ -6,6 +6,7 @@ import * as argon2 from 'argon2'
 export const loginAttempt = catchAsync(async (req, res, next) => {
   const { email: req_email, password: req_pwd } = req.body;
   const user = await User.find({ email: req_email })
+
   if (user.length == 0) {
     res.status(201).json({ message: "you have to register first to log in" })
   }
