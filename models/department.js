@@ -7,6 +7,9 @@ const departmentSchema = new mongoose.Schema({
         unique: true,
         trim: true,
     },
+    roomNo: {
+        type: String
+    },
 });
 
 const Department = mongoose.model('Department', departmentSchema);
