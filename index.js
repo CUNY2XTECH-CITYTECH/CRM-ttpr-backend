@@ -9,20 +9,22 @@ import CompanyRouter from './routes/companyRoute.js'
 import InternshipRouter from './routes/internshipRoute.js'
 import cookieParser from 'cookie-parser'
 import { checkToken } from './middlewares/middleware.js'
+import AdminProfileRouter from './routes/adminRoute.js'
 const app = express()
 dotenv.config()
 const port = process.env.PORT
 connection()
 
-app.use(cors({origin:'http://localhost:5173',credentials:true}))
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET_KEY))
 app.use(express.json())
 // routes
-app.use('/api/users',checkToken,UserRouter)
-app.use('/api/auth',LoginRouter)
-app.use('/api/refresh',RefreshRouter)
-app.use('/api/internship',InternshipRouter)
-app.use('/api/company',CompanyRouter)
+app.use('/api/users', checkToken, UserRouter)
+app.use('/api/adminProfile', checkToken,AdminProfileRouter )
+app.use('/api/auth', LoginRouter)
+app.use('/api/refresh', RefreshRouter)
+app.use('/api/internship', checkToken, InternshipRouter)
+app.use('/api/company', checkToken, CompanyRouter)
 app.listen(port, () => {
   console.log(`backend is running at localhost:${port}`)
 })
