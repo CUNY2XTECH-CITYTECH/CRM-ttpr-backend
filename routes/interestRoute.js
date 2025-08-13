@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { getInterests } from '../controllers/interestController.js';
+import { createInterest, getInterests } from '../controllers/interestController.js';
 
 const interestRouter = Router();
 interestRouter.get('/:id', getInterests);
+interestRouter.post('/create', createInterest);
 
 export default interestRouter;

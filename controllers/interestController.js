@@ -19,5 +19,22 @@ export const getInterests = catchAsync(async (req, res, next) => {
   res.status(200).json({
     data: interests
   });
+});
+
+export const createInterest = catchAsync(async (req, res, next) => {
+  const { name } = req.body;
+  
+  // Validate input
+  if (!name) {
+    return res.status(400).json({ message: "Interest name is required" });
+  }
+  
+  // Create new interest
+  const newInterest = await Interest.create({ name });
+  
+  res.status(201).json({
+    message: "Interest created successfully",
+    data: newInterest
+  });
 }); 
 
