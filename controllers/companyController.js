@@ -4,20 +4,20 @@ import Company from '../models/Company.js'
 import { catchAsync } from '../utils/commonFunctions.js'
 
 export const createCompany = catchAsync(async(req, res, next) => {
-  console.log(req.UserData,'to create compny')
+  console.log(req.UserData,req.body,'to create compny')
   // check if company with same email already exists
   const exist = await Company.find({email: req.body.email})
+  const location = req.body.city +req.body.state+req.body.street+req.body.zipcode
   if(exist.length === 0) {
     const data = { 
       name: req.body.name,
-      description: req.body.description,
       email: req.body.email,
       industry: req.body.industry,
       mission: req.body.mission,
-      contract: req.body.contract,
-      location: req.body.location,
+      location: location,
       website: req.body.website
     }
+    console.log('compay',data)
     const company = await Company.create(data)
     res.status(200).json(company)
   } else {

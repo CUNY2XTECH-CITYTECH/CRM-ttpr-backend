@@ -6,7 +6,6 @@ import * as argon2 from 'argon2'
 export const loginAttempt = catchAsync(async (req, res, next) => {
   const { email: req_email, password: req_pwd } = req.body;
   const user = await User.find({ email: req_email })
-
   if (user.length == 0) {
     res.status(201).json({ message: "you have to register first to log in" })
   }
@@ -33,12 +32,15 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         refresh_token: refresh_token,
         user_id: _id,
         email: email,
+        is_first_login:true,
         created_at: currentTimestamp,
         expired_at: expiresAtTimestamp
       }
       let session_exists = await LoginCredentials.find({ email: email })
       if (session_exists.length > 0) {
+        data.is_first_login = false
         await LoginCredentials.deleteMany({ email: email })
+
       }
       await LoginCredentials.create(data)
       res.cookie('access_token', access_token, {
@@ -48,6 +50,7 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
       res.status(200).json({
         message: {
           role: role,
+          is_first_login:data.is_first_login
         }
       })
     }

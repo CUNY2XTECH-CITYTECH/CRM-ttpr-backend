@@ -11,6 +11,9 @@ const LoginSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid email`
     }
 
+  },
+  is_first_login: {
+    type: Boolean, default: true
   }
   ,
   refresh_token: {

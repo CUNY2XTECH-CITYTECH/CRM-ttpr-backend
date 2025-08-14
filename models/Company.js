@@ -8,7 +8,7 @@ const companySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+//    required: true
   },
   email: {
     type: String,
@@ -24,7 +24,7 @@ const companySchema = new mongoose.Schema({
   },
   contract: {
     type: String,
-    required: true
+//    required: true
   },
   location: {
     type: String,
