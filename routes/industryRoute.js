@@ -5,7 +5,7 @@ import { getIndustryById, updateIndustry, deleteIndustry } from "../controllers/
 const IndustryRouter = Router();
 IndustryRouter.post('/create', createIndustry);
 IndustryRouter.get('/:id', getIndustryById);
-IndustryRouter.post('/', getIndustries);
+IndustryRouter.get('/', getIndustries);
 IndustryRouter.post('/update', updateIndustry);
 IndustryRouter.delete('/delete', deleteIndustry);
 export default IndustryRouter;
