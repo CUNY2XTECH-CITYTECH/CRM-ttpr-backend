@@ -7,7 +7,7 @@ export const createCompany = catchAsync(async(req, res, next) => {
   console.log(req.UserData,req.body,'to create compny')
   // check if company with same email already exists
   const exist = await Company.find({email: req.body.email})
-  const location = req.body.city +req.body.state+req.body.street+req.body.zipcode
+  const location = req.body.street+","+req.body.city+"," +req.body.state+","+req.body.zipcode
   if(exist.length === 0) {
     const data = { 
       name: req.body.name,
@@ -30,11 +30,7 @@ export const createCompany = catchAsync(async(req, res, next) => {
 
 export const getCompanies = catchAsync(async (req, res, next) => {
   const companies = await Company.find()
-  res.status(200).json({
-    status: 'success',
-    results: companies.length,
-    data: companies
-  });
+  res.status(200).json(companies);
 });
 
 export const getCompany = catchAsync(async (req, res, next) => {
@@ -44,15 +40,13 @@ export const getCompany = catchAsync(async (req, res, next) => {
     return next(new AppError('No company found with that ID', 404))
   }
   
-  res.status(200).json({
-    status: 'success',
-    data: company
-  });
+  res.status(200).json(company);
 });
 
 export const updateCompany = catchAsync(async (req, res, next) => {
+  console.log('received',req.body)
   const company = await Company.findByIdAndUpdate(
-    req.params.id,
+    req.body._id,
     req.body,
     {
       new: true,
@@ -64,10 +58,7 @@ export const updateCompany = catchAsync(async (req, res, next) => {
     return next(new AppError('No company found with that ID', 404))
   }
 
-  res.status(200).json({
-    status: 'success',
-    data: company
-  });
+  res.status(200).json(company);
 });
 
 export const deleteCompany = catchAsync(async (req, res, next) => {
@@ -77,8 +68,5 @@ export const deleteCompany = catchAsync(async (req, res, next) => {
     return next(new AppError('No company found with that ID', 404))
   }
 
-  res.status(204).json({
-    status: 'success',
-    data: null
-  })
+  res.status(204).json({message:"deleted successfully"})
 })

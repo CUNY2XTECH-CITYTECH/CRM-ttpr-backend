@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const industrySchema = new mongoose.Schema({
-    industryName: {
+    name: {
         type: String,
         required: true,
         unique: true,
