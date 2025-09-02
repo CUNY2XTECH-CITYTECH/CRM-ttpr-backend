@@ -6,9 +6,11 @@ export const createDepartment = catchAsync(async (req, res, next) => {
   const exist = await Department.find({
     name: req.body.name,
   });
+  console.log('it does exist', exist.length);
+  console.log(req.body,'body');
   if (exist.length === 0) {
     const department = await Department.create(req.body);
-
+    console.log('created department', department);
     res.status(200).json({
       departments: department,
     });
