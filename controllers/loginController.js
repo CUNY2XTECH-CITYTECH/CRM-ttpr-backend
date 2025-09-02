@@ -59,7 +59,6 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
 
 export const refreshAccessToken = catchAsync(async (req, res, next) => {
   const { userId } = req.body;
-  console.log('body', req.body)
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const { access_token, refresh_token } = generateTokenPair({ userId: userId })
 
@@ -67,10 +66,7 @@ export const refreshAccessToken = catchAsync(async (req, res, next) => {
   // if not expired and refresh_token exists
   if (get_refresh_Tk[0]?.expired_at > currentTimestamp) {
     await LoginCredentials.updateOne({ user_id: userId }, { $set: { refresh_token: refresh_token } })
-    console.log("=============N================")
-    console.log(access_token)
-    console.log("==============================")
-    res.cookie('access_token', access_token, {
+        res.cookie('access_token', access_token, {
       secure: true,
       maxAge: 24 * 60 * 60 * 2000 // 1 day
     })

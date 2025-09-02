@@ -9,7 +9,6 @@ export const checkToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: err.message })
     }
-    console.log(decoded, currentTimestamp, 'way')
     if (decoded.exp < currentTimestamp) {
       return res.status(403)
         .json({ message: "TokenExpired", data: { userId: decoded.userId } })

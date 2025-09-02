@@ -12,40 +12,25 @@ export const getCities = catchAsync(async (req, res, next) => {
   // Read the JSON file
   const data = await fs.readFile(city_json, 'utf-8');
   const cities_dict = JSON.parse(data);
-  const cities = Object.values(cities_dict).flat().slice(0,30)
+  const cities = Object.values(cities_dict).flat().slice(0, 30)
   res.status(200).json(
     cities
   );
 });
 export const getCitySuggestions = catchAsync(async (req, res, next) => {
-  const {state} = req.body; 
   const data = await fs.readFile(city_json, 'utf-8');
-  const cities = JSON.parse(data);
-   const arr = cities[state]
-  const query = req.params.id?.toString().toLowerCase() || '';
+  const all_cities = JSON.parse(data);
+  const query_list = req.params.id?.split(" ")
+  const query = query_list.map((e) => e[0].toUpperCase() + e.slice(1)).join(" ")
+  const filtered_cites = all_cities[query]
 
-  console.log('wow', cities[state],query)
   // Return empty array if query is too short
   if (query.length < 2) {
     return res.json({ suggestions: [] });
   }
-
-  // Filter cities (case-insensitive search)
-  const filteredCities = arr.filter(city =>
-    city.toLowerCase().includes(query) 
-  ).slice(0, 8); // Limit results
-
-  // Format response
-  const suggestions = filteredCities.map(city => ({
-    data: city // Include full data
-  }));
-
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 100));
-
   res.json({
-    success: true,
-    suggestions
+    data:
+    filtered_cites
   });
 }
 )
