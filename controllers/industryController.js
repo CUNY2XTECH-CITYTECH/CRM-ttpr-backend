@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 export const createIndustry = catchAsync(async (req, res, next) => {
     const industry = await Industry.create(req.body);
 
-    res.status(201).json({
+    res.status(200).json({
         status: 'success',
         data: {
             industry,
