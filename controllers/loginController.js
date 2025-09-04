@@ -1,6 +1,6 @@
 import LoginCredentials from '../models/Login.js'
 import User from '../models/User.js'
-import { catchAsync } from '../utils/commonFunctions.js'
+import { catchAsync, generateTokenPair } from '../utils/commonFunctions.js'
 import * as argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 
@@ -23,12 +23,12 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
       res.status(401).json({ message: "Your password is incorrect" })
     }
     else {
-      const payload = { name, email, role }
-      const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '15m' })
-      const refresh_token = jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET_KEY, { expiresIn: '7d' })
+      const { access_token, refresh_token } = generateTokenPair({ userId: _id })
       const durationInSeconds = 7 * 24 * 60 * 60; // 7 days in seconds
       const currentTimestamp = Math.floor(Date.now() / 1000);
+      console.log(currentTimestamp)
       const expiresAtTimestamp = currentTimestamp + durationInSeconds;
+      console.log(expiresAtTimestamp)
       const data = {
         refresh_token: refresh_token,
         user_id: _id,
@@ -41,21 +41,53 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         await LoginCredentials.deleteMany({ email: email })
       }
       await LoginCredentials.create(data)
-      console.log('wtf', access_token)
       res.cookie('access_token', access_token, {
         secure: true,
-        signed: true,
-        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        maxAge: 24 * 60 * 60 * 2000 // 1 day
       })
       res.status(200).json({
         message: {
           role: role,
-          email: email,
         }
       })
-
     }
   }
 })
 
+export const refreshAccessToken = catchAsync(async (req, res, next) => {
+  const { userId } = req.body;
+  console.log('body', req.body)
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const { access_token, refresh_token } = generateTokenPair({ userId: userId })
 
+  let get_refresh_Tk = await LoginCredentials.find({ user_id: userId })
+  // if not expired and refresh_token exists
+  if (get_refresh_Tk[0]?.expired_at > currentTimestamp) {
+    await LoginCredentials.updateOne({ user_id: userId }, { $set: { refresh_token: refresh_token } })
+    console.log("=============N================")
+    console.log(access_token)
+    console.log("==============================")
+    res.cookie('access_token', access_token, {
+      secure: true,
+      maxAge: 24 * 60 * 60 * 2000 // 1 day
+    })
+    return res.status(200).json({ message: "Refreshed successfully" })
+  }
+  else {
+    return res.status(401).json({ message: "Refresh token expired" })
+  }
+}
+)
+export const logoutAttempt = catchAsync(async (req, res, next) => {
+  try {
+    res.clearCookie("access_token", {
+      secure: true,
+      path:'/'
+    })
+    res.status(200).json({ message: "Logged out" });
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+)
