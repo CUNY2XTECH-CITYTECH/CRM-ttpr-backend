@@ -14,6 +14,7 @@ import DepartmentRouter from './routes/departmentRoute.js'
 import IndustryRouter from './routes/industryRoute.js'  
 import StateRouter from './routes/stateRouter.js'
 import CityRouter from './routes/CityRoute.js'
+import PositionRouter from './routes/positionRoute.js'
 
 const app = express()
 dotenv.config()
@@ -33,7 +34,8 @@ app.use('/api/users', checkToken, UserRouter)
 app.use('/api/auth', LoginRouter)
 app.use('/api/refresh', RefreshRouter)
 app.use('/api/internship', InternshipRouter)
-app.use('/api/department', DepartmentRouter)
+app.use('/api/department',checkToken, DepartmentRouter)
+app.use('/api/position',checkToken, PositionRouter)
 app.use('/api/cities',CityRouter)
 app.use('/api/states',StateRouter)
 app.listen(port, () => {

@@ -7,15 +7,12 @@ export const createCompany = catchAsync(async(req, res, next) => {
   console.log(req.UserData,req.body,'to create compny')
   // check if company with same email already exists
   const exist = await Company.find({email: req.body.email})
-  const location = req.body.street+","+req.body.city+"," +req.body.state+","+req.body.zipcode
+  const {state,city,zipcode,street,...otherInfo} = req.body
+  const location = [street,city,state,zipcode].filter(Boolean).join(", ")
   if(exist.length === 0) {
     const data = { 
-      name: req.body.name,
-      email: req.body.email,
-      industry: req.body.industry,
-      mission: req.body.mission,
-      location: location,
-      website: req.body.website
+      location:location,
+      ...otherInfo
     }
     console.log('compay',data)
     const company = await Company.create(data)
