@@ -7,4 +7,4 @@ DepartmentRouter.get('/:id', getDepartmentById);
 DepartmentRouter.get('/', getDepartment);
 DepartmentRouter.post('/update', updateDepartment);
 DepartmentRouter.delete('/delete', deleteDepartment);
-export default DepartmentRouter;
+export default DepartmentRouter;    
