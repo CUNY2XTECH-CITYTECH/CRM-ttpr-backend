@@ -20,8 +20,7 @@ export const createUsers = catchAsync(async (req, res, next) => {
 )
 
 export const getUsers = catchAsync(async (req, res, next) => {
-  console.log('user', req.UserData)
-  const user = await User.find()
+  const user = await User.find(req.query?.role?req.query:{})
   console.log(req.headers.authorization, 'lol')
   res.status(200).json(user)
 }

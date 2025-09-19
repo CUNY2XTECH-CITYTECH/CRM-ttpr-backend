@@ -40,7 +40,6 @@ const companySchema = new mongoose.Schema({
   },
   mission: {
     type: String,
-    required: true
   },
   contract: {
     type: String,

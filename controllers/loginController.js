@@ -10,7 +10,7 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
     res.status(201).json({ message: "you have to register first to log in" })
   }
   else {
-    const { _id, name, email, password, role, verified, locked } = user[0]
+    const { _id, email, password, role, verified, locked } = user[0]
     if (locked) {
       return res.status(403).json({ message: "Login is Forbidden" })
     }
@@ -32,7 +32,7 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         refresh_token: refresh_token,
         user_id: _id,
         email: email,
-        is_first_login:true,
+        is_first_login: true,
         created_at: currentTimestamp,
         expired_at: expiresAtTimestamp
       }
@@ -50,7 +50,7 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
       res.status(200).json({
         message: {
           role: role,
-          is_first_login:data.is_first_login
+          is_first_login: data.is_first_login
         }
       })
     }
@@ -66,9 +66,9 @@ export const refreshAccessToken = catchAsync(async (req, res, next) => {
   // if not expired and refresh_token exists
   if (get_refresh_Tk[0]?.expired_at > currentTimestamp) {
     await LoginCredentials.updateOne({ user_id: userId }, { $set: { refresh_token: refresh_token } })
-        res.cookie('access_token', access_token, {
+    res.cookie('access_token', access_token, {
       secure: true,
-      maxAge: 24 * 60 * 60 * 2000 // 1 day
+      maxAge: 3600 / 60 // 1 day
     })
     return res.status(200).json({ message: "Refreshed successfully" })
   }
@@ -81,7 +81,7 @@ export const logoutAttempt = catchAsync(async (req, res, next) => {
   try {
     res.clearCookie("access_token", {
       secure: true,
-      path:'/'
+      path: '/'
     })
     res.status(200).json({ message: "Logged out" });
   }
