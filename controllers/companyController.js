@@ -29,6 +29,17 @@ export const createCompany = catchAsync(async (req, res, next) => {
     })
   }
 })
+export const companyMatrix= catchAsync(async (req, res, next) => {
+  try{
+  const totalCompanies = await Company.countDocuments();
+    console.log(totalCompanies,'totalCompanies')
+  res.status(200).json({companyCount:totalCompanies})
+  }
+  catch(error){
+    console.log(error,'lol')
+  }
+})
+
 export const createManyCompanies = catchAsync(async (req, res, next) => {
   const industryMap = new Map();
   const positionMap = new Map();

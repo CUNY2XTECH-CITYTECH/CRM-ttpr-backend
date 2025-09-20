@@ -16,7 +16,7 @@ export const catchAsync = (fn) => {
 }
 
 export const generateTokenPair = (payload) => {
-  const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '15m' })
+  const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '1h' })
   const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET_KEY, { expiresIn: '7d' })
   return { access_token, refresh_token }
 }

@@ -5,7 +5,7 @@ const industrySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-});
+}, { timestamps: true });
 
 const Industry = mongoose.model('Industry', industrySchema);
 
