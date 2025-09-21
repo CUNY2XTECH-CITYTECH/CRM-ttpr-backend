@@ -17,11 +17,85 @@ export const createUsers = catchAsync(async (req, res, next) => {
   }
 }
 )
+export const matrix = catchAsync(async (req, res, next) => {
+  const studentCount = await User.countDocuments({ role: 'student', locked: false });
+  const staffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, locked: false, verified: true });
+  const pendingStaffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, verified: false, locked: false });
+  res.status(200).json({ studentCount, staffCount, pendingStaffCount })
+})
+export const actionPendingStaff = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  console.log(id,'id')
+  const { action } = req.body // action should be either 'approve' or 'reject'
+  const check = await User.find({ _id: id })
+  console.log(check,'check')
+  if(check.length!==0){
+  if (action === 'approve') {
+    const user = await User.updateOne({ _id: id }, { $set: { verified: true } })
+   console.log(user,'user')
+      res.status(200).json({message:"Staff approved successfully"})
+  }
+    else if (action === 'reject') {
+      const user = await User.deleteOne({ _id: id })
+      res.status(200).json({message:"Staff rejected and deleted successfully"})
+    }
+  }
+  else{
+    res.status(404).json({message:"No user found with the given id"})
+  }
+})
+export const getRegisteredStaffs = catchAsync(async (req, res, next) => {
+  const user = await User.find({ role: { $in: ['admin', 'staff'] }, locked: false })
+  res.status(200).json(user)
+})
+export const getStudents = catchAsync(async (req, res, next) => {
+  const user = await User.find({ role: 'student', locked: false })
+  res.status(200).json(user)
+})
+export const getVerifiedStaffs = catchAsync(async (req, res, next) => {
+  const user = await User.find({ role: { $in: ['admin', 'staff'] }, verified: true, locked: false })
+  res.status(200).json(user)
+})
+// export const getPendingStaffs = catchAsync(async (req, res, next) => {
+//   const user = await User.find({ role: { $in: ['admin', 'staff'] }, verified: false, locked: false })
+//   res.status(200).json(user)
+// })
+export const getPendingStaffs = catchAsync(async (req, res, next) => {
+  let { page, pageSize } = req.query;
+
+  try {
+    // If "page" and "pageSize" are not sent we will default them to 1 and 50.
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 50;
+
+    const users = await User.aggregate([
+      { $match: { role: { $in: ['admin', 'staff'] }, verified: false, locked: false } },
+      {
+        $facet: {
+          metadata: [{ $count: 'totalCount' }],
+          data: [{
+            $sort: { createdAt: -1 }
+          }, { $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+        }
+      }
+    ]);
+    return res.status(200).json({
+      success: true,
+      metadata: { totalCount: users[0].metadata[0].totalCount, page, pageSize },
+      pendingStaffs: users[0].data,
+    });
+  } catch (error) {
+    console.error('Error fetching paginated users:', error);
+    return res.status(500).json(error);
+  }
+})
+export const getLockedUsers = catchAsync(async (req, res, next) => {
+  const user = await User.find({ locked: true })
+  res.status(200).json(user)
+})
 
 export const getUsers = catchAsync(async (req, res, next) => {
-  console.log('user', req.UserData)
-  const user = await User.find()
-  console.log(req.headers.authorization, 'lol')
+  const user = await User.find(req.query?.role ? req.query : {})
   res.status(200).json(user)
 }
 )
