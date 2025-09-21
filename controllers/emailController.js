@@ -8,7 +8,8 @@ export const sendEmail = catchAsync(async (req, res, next) => {
    const __dirname = path.dirname(__filename);
   const templatePath = path.join(__dirname,'/static-data/emailTemplate')
   console.log(templatePath,'path')
-  const emailTemplateHTML= fs.readFileSync(templatePath,'utf-8')
+  const approvalTemplateHTML= fs.readFileSync(templatePath,'utf-8')
+  const rejectionTemplateHTML= fs.readFileSync(templatePath,'utf-8')
   const { recipient, action} = req.body;
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -21,7 +22,7 @@ export const sendEmail = catchAsync(async (req, res, next) => {
     from:"crm@cuny.com",
     to: recipient,
     subject: subject,
-    html: action=='rejectemailTemplateHTML
+    html: action=='reject'?rejectionTemplateHTML:approvalTemplateHTML
   }
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
