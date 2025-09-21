@@ -8,7 +8,7 @@ const departmentSchema = new mongoose.Schema({
     roomNo: {
         type: String
     }
-});
+}, { timestamps: true });
 
 const Department = mongoose.model('Department', departmentSchema);
 

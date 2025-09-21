@@ -3,10 +3,9 @@ import Industry from '../models/industry.js';
 import mongoose from 'mongoose';
 
 export const createIndustry = catchAsync(async (req, res, next) => {
-  console.log(req.body, 'body');
-  const exist = await Industry.find({ name: req.body.name });
+  const exist = await Industry.find({ name: req.body.name.toLowerCase() });
   if (exist.length === 0) {
-    const industry = await Industry.create(req.body);
+    const industry = await Industry.create({name: req.body.name.toLowerCase()});
     res.status(200).json({industries:industry});
   }
   else {

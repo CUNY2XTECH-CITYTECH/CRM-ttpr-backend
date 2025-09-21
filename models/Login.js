@@ -30,6 +30,6 @@ const LoginSchema = new mongoose.Schema({
     type: BigInt, required: true
   }
 
-})
+},{timestamps:true})
 
 export default mongoose.model('LoginCredentials', LoginSchema)
