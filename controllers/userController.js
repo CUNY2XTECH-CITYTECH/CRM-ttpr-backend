@@ -18,7 +18,6 @@ export const createUsers = catchAsync(async (req, res, next) => {
 }
 )
 export const matrix = catchAsync(async (req, res, next) => {
-
   const studentCount = await User.countDocuments({ role: 'student', locked: false });
   const staffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, locked: false, verified: true });
   const pendingStaffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, verified: false, locked: false });
