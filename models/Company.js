@@ -1,5 +1,5 @@
 // models/Company.js
-import mongoose from 'mongoose' 
+import mongoose from 'mongoose'
 
 const companySchema = new mongoose.Schema({
   name: {
@@ -8,29 +8,29 @@ const companySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-//    required: true
+    //    required: true
   },
   email: {
     type: String,
     required: true
   },
-  contactName:{
+  contactName: {
     type: String,
     required: true
   },
-  contactEmail:{
+  contactEmail: {
     type: String,
     required: true
   },
-  contactDepartment:{
+  contactDepartment: {
     type: String,
     required: true
   },
-  contactPosition:{
+  contactPosition: {
     type: String,
     required: true
   },
-  contactPhone:{ 
+  contactPhone: {
     type: String,
     required: true
   },
@@ -40,11 +40,10 @@ const companySchema = new mongoose.Schema({
   },
   mission: {
     type: String,
-    required: true
   },
   contract: {
     type: String,
-//    required: true
+    //    required: true
   },
   location: {
     type: String,

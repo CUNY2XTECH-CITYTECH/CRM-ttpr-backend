@@ -1,14 +1,12 @@
 import {catchAsync} from "../utils/commonFunctions.js";
 import Position from "../models/Position.js";
-import mongoose from "mongoose";
 
 export const createPosition = catchAsync(async (req, res, next) => {
     const exist = await Position.find({
-        title: req.body.title
+        title: req.body.name.toLowerCase()
     });
-    console.log(req.body, 'body');
     if (exist.length === 0) {
-        const position = await Position.create(req.body);
+        const position = await Position.create({name: req.body.title.toLowerCase()});
         console.log('created position', position);
         res.status(200).json({
             positions: position
