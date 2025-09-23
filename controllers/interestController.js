@@ -10,8 +10,19 @@ export const getInterests = catchAsync(async (req, res, next) => {
       data: interests
     });
   }
+
+  const interests = await Interest.find({ _id: getID });
+  if (!interests || interests.length === 0) {
+    return res.status(404).json({ message: "No interests found" });
+  }
   
-export const deleteInterest(req, res, next) {
+  res.status(200).json({
+    data: interests
+  });
+});
+
+export const deleteInterest = catchAsync(async(req, res, next) => {
+  const getID = req.params.id;
   if (!getID) {
     return res.status(400).json({ message: "Interest ID is required" });
   }
@@ -24,17 +35,6 @@ export const deleteInterest(req, res, next) {
   res.status(200).json({
     message: "Interest deleted successfully",
     data: interest
-  });
-}
-
-
-  const interests = await Interest.find({ _id: getID });
-  if (!interests || interests.length === 0) {
-    return res.status(404).json({ message: "No interests found" });
-  }
-  
-  res.status(200).json({
-    data: interests
   });
 });
 

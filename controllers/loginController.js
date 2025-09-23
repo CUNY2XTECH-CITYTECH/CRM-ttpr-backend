@@ -2,7 +2,6 @@ import LoginCredentials from '../models/Login.js'
 import User from '../models/User.js'
 import { catchAsync, generateTokenPair } from '../utils/commonFunctions.js'
 import * as argon2 from 'argon2'
-import jwt from 'jsonwebtoken'
 
 export const loginAttempt = catchAsync(async (req, res, next) => {
   const { email: req_email, password: req_pwd } = req.body;
@@ -33,12 +32,15 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         refresh_token: refresh_token,
         user_id: _id,
         email: email,
+        is_first_login:true,
         created_at: currentTimestamp,
         expired_at: expiresAtTimestamp
       }
       let session_exists = await LoginCredentials.find({ email: email })
       if (session_exists.length > 0) {
+        data.is_first_login = false
         await LoginCredentials.deleteMany({ email: email })
+
       }
       await LoginCredentials.create(data)
       res.cookie('access_token', access_token, {
@@ -48,6 +50,7 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
       res.status(200).json({
         message: {
           role: role,
+          is_first_login:data.is_first_login
         }
       })
     }
@@ -56,7 +59,6 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
 
 export const refreshAccessToken = catchAsync(async (req, res, next) => {
   const { userId } = req.body;
-  console.log('body', req.body)
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const { access_token, refresh_token } = generateTokenPair({ userId: userId })
 
@@ -64,10 +66,7 @@ export const refreshAccessToken = catchAsync(async (req, res, next) => {
   // if not expired and refresh_token exists
   if (get_refresh_Tk[0]?.expired_at > currentTimestamp) {
     await LoginCredentials.updateOne({ user_id: userId }, { $set: { refresh_token: refresh_token } })
-    console.log("=============N================")
-    console.log(access_token)
-    console.log("==============================")
-    res.cookie('access_token', access_token, {
+        res.cookie('access_token', access_token, {
       secure: true,
       maxAge: 24 * 60 * 60 * 2000 // 1 day
     })

@@ -8,9 +8,29 @@ const companySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+//    required: true
   },
   email: {
+    type: String,
+    required: true
+  },
+  contactName:{
+    type: String,
+    required: true
+  },
+  contactEmail:{
+    type: String,
+    required: true
+  },
+  contactDepartment:{
+    type: String,
+    required: true
+  },
+  contactPosition:{
+    type: String,
+    required: true
+  },
+  contactPhone:{ 
     type: String,
     required: true
   },
@@ -24,7 +44,7 @@ const companySchema = new mongoose.Schema({
   },
   contract: {
     type: String,
-    required: true
+//    required: true
   },
   location: {
     type: String,
