@@ -46,7 +46,15 @@ export const actionPendingStaff = catchAsync(async (req, res, next) => {
 })
 export const getRegisteredStaffs = catchAsync(async (req, res, next) => {
   const user = await User.find({ role: { $in: ['admin', 'staff'] }, locked: false })
-  res.status(200).json(user)
+  // Remove password field from each user object
+  if(user.length===0){
+    return res.status(200).json([])
+  }
+  const filteredUserData = user.map((_doc) => {
+    const { password, ...userWithoutPassword } = _doc.toObject();
+    return userWithoutPassword;
+  })
+  res.status(200).json(filteredUserData)
 })
 export const getStudents = catchAsync(async (req, res, next) => {
   const user = await User.find({ role: 'student', locked: false })
@@ -123,10 +131,12 @@ export const updateUser = catchAsync(async (req, res, next) => {
 }
 )
 export const deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.deleteOne(req.body)
-  res.status(200).json({
-    deleted: true
-  })
+  const user = await User.findByIdAndDelete(req.body.id)
+  if(!user){
+    return res.status(404).json({message:"No user found with the given id"})
+  }
 
+  res.status(200).json(user)
+ 
 })
 
