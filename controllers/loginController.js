@@ -37,18 +37,16 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         expired_at: expiresAtTimestamp
       }
       let session_exists = await LoginCredentials.find({ email: email })
+      console.log(session_exists.length, 'session_exists')
       if (session_exists.length > 0) {
         data.is_first_login = false
         await LoginCredentials.deleteMany({ email: email })
-
       }
-      await LoginCredentials.create(data)
+      const replace =await LoginCredentials.create(data)
       res.cookie('access_token', access_token, {
         secure: true,
         maxAge: 24 * 60 * 60 * 2000 // 1 day
       })
-      console.log(access_token)
-      console.log(refresh_token)
       res.status(200).json({
         message: {
           role: role,
@@ -61,16 +59,18 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
 
 export const refreshAccessToken = catchAsync(async (req, res, next) => {
   const { userId } = req.body;
+  console.log(userId, 'userId')
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const { access_token, refresh_token } = generateTokenPair({ userId: userId })
 
   let get_refresh_Tk = await LoginCredentials.find({ user_id: userId })
   // if not expired and refresh_token exists
+  console.log(get_refresh_Tk, 'get_refresh_Tk')
   if (get_refresh_Tk[0]?.expired_at > currentTimestamp) {
     await LoginCredentials.updateOne({ user_id: userId }, { $set: { refresh_token: refresh_token } })
     res.cookie('access_token', access_token, {
       secure: true,
-      maxAge: 3600 / 60 // 1 day
+      maxAge: 24 * 60 * 60 * 2000
     })
     return res.status(200).json({ message: "Refreshed successfully" })
   }

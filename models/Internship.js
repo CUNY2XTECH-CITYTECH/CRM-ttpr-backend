@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 const internshipSchema = new mongoose.Schema({
   company: {
-    type: mongoose.Schema.Types.ObjectId,
+    type:String,
     ref: 'Company',
     required: true
   },
