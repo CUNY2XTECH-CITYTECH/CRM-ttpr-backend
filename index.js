@@ -45,8 +45,8 @@ app.use('/api/states', StateRouter)
 app.use('/api/email', checkToken, emailRoute)
 app.use('/api/studentProfile', checkToken, StudentRouter)
 app.use('/api/,major', checkToken, MajorRouter)
-// app.use('/api/appointment', checkToken,AppointmentRouter)
-// app.use('/api/email',checkToken,emailRoute)
+app.use('/api/appointment', checkToken,AppointmentRouter)
+app.use('/api/email',checkToken,emailRoute)
 app.listen(port, () => {
 
   console.log(`backend is running at localhost:${port}`)

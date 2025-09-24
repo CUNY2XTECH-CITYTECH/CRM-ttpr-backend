@@ -17,12 +17,21 @@ export const createUsers = catchAsync(async (req, res, next) => {
   }
 }
 )
+
 export const matrix = catchAsync(async (req, res, next) => {
+  console.log('matrix')
+  try{
   const studentCount = await User.countDocuments({ role: 'student', locked: false });
+  console.log(studentCount,'studentCount')
   const staffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, locked: false, verified: true });
   const pendingStaffCount = await User.countDocuments({ role: { $in: ['admin', 'staff'] }, verified: false, locked: false });
   res.status(200).json({ studentCount, staffCount, pendingStaffCount })
+  }
+  catch(error){
+    console.log(error,'lol')
+  }
 })
+
 export const actionPendingStaff = catchAsync(async (req, res, next) => {
   const { id } = req.params
   console.log(id,'id')
@@ -56,6 +65,7 @@ export const getRegisteredStaffs = catchAsync(async (req, res, next) => {
   })
   res.status(200).json(filteredUserData)
 })
+
 export const getStudents = catchAsync(async (req, res, next) => {
   const user = await User.find({ role: 'student', locked: false })
   res.status(200).json(user)
@@ -115,12 +125,24 @@ export const getUsers = catchAsync(async (req, res, next) => {
   res.status(200).json(user)
 }
 )
-export const getOneUser = catchAsync(async (req, res, next) => {
+export const getCurrentUser= catchAsync(async (req, res, next) => {
   // req.body should come as {id:'...'}
   const { userId } = req.UserData
   const user = await User.find({ _id: userId })
   res.status(200).json(user)
 })
+//get one user with id
+export const getOneUser= catchAsync(async (req, res, next) => {
+  // req.body should come as {id:'...'}
+  const { id } = req.params 
+  console.log(id,'id')
+  const user = await User.find({ _id: id })
+  if(user.length===0){
+    return res.status(404).json({message:"No user found with the given id"})
+  }
+  res.status(200).json(user)
+}
+)
 export const updateUser = catchAsync(async (req, res, next) => {
   const { _id, data } = req.body
   const user = await User.updateOne({ _id: _id }, { $set: data })

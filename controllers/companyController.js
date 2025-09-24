@@ -32,7 +32,6 @@ export const createCompany = catchAsync(async (req, res, next) => {
 export const companyMatrix= catchAsync(async (req, res, next) => {
   try{
   const totalCompanies = await Company.countDocuments();
-    console.log(totalCompanies,'totalCompanies')
   res.status(200).json({companyCount:totalCompanies})
   }
   catch(error){
