@@ -12,12 +12,14 @@ import { checkToken } from './middlewares/middleware.js'
 import AdminProfileRouter from './routes/adminRoute.js'
 import AppointmentRouter from './routes/appointmentRoute.js'
 import DepartmentRouter from './routes/departmentRoute.js'
-import IndustryRouter from './routes/industryRoute.js'  
+import IndustryRouter from './routes/industryRoute.js'
 import StateRouter from './routes/stateRouter.js'
 import CityRouter from './routes/CityRoute.js'
 import PositionRouter from './routes/positionRoute.js'
 import { emailRoute } from './routes/emailRoute.js'
-
+import StudentRouter from './routes/studentRoute.js'
+import MajorRouter from './routes/majorRoute.js'
+// import AppointmentRouter from './routes/appointmentRoute.js'
 const app = express()
 dotenv.config()
 const port = process.env.PORT
@@ -32,17 +34,20 @@ app.use('/api/refresh', RefreshRouter)
 app.use('/api/internship', checkToken, InternshipRouter)
 app.use('/api/company', checkToken, CompanyRouter)
 app.use('/api/industry', IndustryRouter)
-app.use('/api/users',  UserRouter)
+app.use('/api/users', UserRouter)
 app.use('/api/auth', LoginRouter)
 app.use('/api/refresh', RefreshRouter)
 app.use('/api/internship', InternshipRouter)
-app.use('/api/department',checkToken, DepartmentRouter)
-app.use('/api/appointment',checkToken, AppointmentRouter)
-app.use('/api/position',checkToken, PositionRouter)
-app.use('/api/cities',CityRouter)
-app.use('/api/states',StateRouter)
-app.use('/api/email',checkToken,emailRoute)
+app.use('/api/department', checkToken, DepartmentRouter)
+app.use('/api/position', checkToken, PositionRouter)
+app.use('/api/cities', CityRouter)
+app.use('/api/states', StateRouter)
+app.use('/api/email', checkToken, emailRoute)
+app.use('/api/studentProfile', checkToken, StudentRouter)
+app.use('/api/,major', checkToken, MajorRouter)
+// app.use('/api/appointment', checkToken,AppointmentRouter)
 // app.use('/api/email',checkToken,emailRoute)
 app.listen(port, () => {
+
   console.log(`backend is running at localhost:${port}`)
 })

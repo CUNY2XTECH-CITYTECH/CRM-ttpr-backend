@@ -46,7 +46,15 @@ export const actionPendingStaff = catchAsync(async (req, res, next) => {
 })
 export const getRegisteredStaffs = catchAsync(async (req, res, next) => {
   const user = await User.find({ role: { $in: ['admin', 'staff'] }, locked: false })
-  res.status(200).json(user)
+  // Remove password field from each user object
+  if(user.length===0){
+    return res.status(200).json([])
+  }
+  const filteredUserData = user.map((_doc) => {
+    const { password, ...userWithoutPassword } = _doc.toObject();
+    return userWithoutPassword;
+  })
+  res.status(200).json(filteredUserData)
 })
 export const getStudents = catchAsync(async (req, res, next) => {
   const user = await User.find({ role: 'student', locked: false })
@@ -67,7 +75,7 @@ export const getPendingStaffs = catchAsync(async (req, res, next) => {
     // If "page" and "pageSize" are not sent we will default them to 1 and 50.
     page = parseInt(page, 10) || 1;
     pageSize = parseInt(pageSize, 10) || 50;
-
+    console.log(page, pageSize, 'pagination params');
     const users = await User.aggregate([
       { $match: { role: { $in: ['admin', 'staff'] }, verified: false, locked: false } },
       {
@@ -79,6 +87,14 @@ export const getPendingStaffs = catchAsync(async (req, res, next) => {
         }
       }
     ]);
+    console.log(users, 'paginated users');
+    if (users.length === 0 || users[0].data.length === 0) {
+      return res.status(200).json({
+        success: true,
+        metadata: { totalCount: 0, page, pageSize },
+        pendingStaffs: [],
+      });
+    }
     return res.status(200).json({
       success: true,
       metadata: { totalCount: users[0].metadata[0].totalCount, page, pageSize },
@@ -115,10 +131,12 @@ export const updateUser = catchAsync(async (req, res, next) => {
 }
 )
 export const deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.deleteOne(req.body)
-  res.status(200).json({
-    deleted: true
-  })
+  const user = await User.findByIdAndDelete(req.body.id)
+  if(!user){
+    return res.status(404).json({message:"No user found with the given id"})
+  }
 
+  res.status(200).json(user)
+ 
 })
 

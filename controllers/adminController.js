@@ -17,7 +17,11 @@ export const createAdminProfile= catchAsync(async (req, res, next) => {
   }
 }
 )
-
+export const getAllAdminProfiles= catchAsync(async (req, res, next) => {
+  const user = await AdminProfile.find()
+  res.status(200).json(user)
+}
+)
 export const getAdminProfile= catchAsync(async (req, res, next) => {
   // req.body should come as {id:'...'}
   const { userId } = req.UserData
@@ -34,10 +38,7 @@ export const updateAdminProfile = catchAsync(async (req, res, next) => {
 }
 )
 export const deleteAdminProfile = catchAsync(async (req, res, next) => {
-  const user = await AdminProfile.deleteOne(req.body)
-  res.status(200).json({
-    deleted: true
-  })
-
+  const user = await AdminProfile.findByIdAndDelete(req.body.id)
+  res.status(200).json(user)
 })
 
