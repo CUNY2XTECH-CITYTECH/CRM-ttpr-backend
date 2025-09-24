@@ -22,6 +22,13 @@ export const getAllAdminProfiles= catchAsync(async (req, res, next) => {
   res.status(200).json(user)
 }
 )
+//get user by id
+export const getAdminProfileById= catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  const user = await AdminProfile.find({ user_id: id })
+  res.status(200).json(user)
+}
+)
 export const getAdminProfile= catchAsync(async (req, res, next) => {
   // req.body should come as {id:'...'}
   const { userId } = req.UserData

@@ -115,12 +115,23 @@ export const getUsers = catchAsync(async (req, res, next) => {
   res.status(200).json(user)
 }
 )
-export const getOneUser = catchAsync(async (req, res, next) => {
+export const getCurrentUser= catchAsync(async (req, res, next) => {
   // req.body should come as {id:'...'}
   const { userId } = req.UserData
   const user = await User.find({ _id: userId })
   res.status(200).json(user)
 })
+//get one user with id
+export const getOneUser= catchAsync(async (req, res, next) => {
+  // req.body should come as {id:'...'}
+  const { id } = req.params 
+  const user = await User.find({ _id: id })
+  if(user.length===0){
+    return res.status(404).json({message:"No user found with the given id"})
+  }
+  res.status(200).json(user)
+}
+)
 export const updateUser = catchAsync(async (req, res, next) => {
   const { _id, data } = req.body
   const user = await User.updateOne({ _id: _id }, { $set: data })
