@@ -10,6 +10,7 @@ import InternshipRouter from './routes/internshipRoute.js'
 import cookieParser from 'cookie-parser'
 import { checkToken } from './middlewares/middleware.js'
 import AdminProfileRouter from './routes/adminRoute.js'
+import AppointmentRouter from './routes/appointmentRoute.js'
 import DepartmentRouter from './routes/departmentRoute.js'
 import IndustryRouter from './routes/industryRoute.js'  
 import StateRouter from './routes/stateRouter.js'
@@ -36,6 +37,7 @@ app.use('/api/auth', LoginRouter)
 app.use('/api/refresh', RefreshRouter)
 app.use('/api/internship', InternshipRouter)
 app.use('/api/department',checkToken, DepartmentRouter)
+app.use('/api/appointment',checkToken, AppointmentRouter)
 app.use('/api/position',checkToken, PositionRouter)
 app.use('/api/cities',CityRouter)
 app.use('/api/states',StateRouter)

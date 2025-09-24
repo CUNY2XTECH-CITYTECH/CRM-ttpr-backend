@@ -47,6 +47,8 @@ export const loginAttempt = catchAsync(async (req, res, next) => {
         secure: true,
         maxAge: 24 * 60 * 60 * 2000 // 1 day
       })
+      console.log(access_token)
+      console.log(refresh_token)
       res.status(200).json({
         message: {
           role: role,

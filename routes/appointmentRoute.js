@@ -1,20 +1,16 @@
 import { Router } from "express";
-import {
-  createAppointment,
-  getAppointments,
-  getAppointment,
-  updateAppointment,
-  deleteAppointment,
-  sendInvite
+import {createAppointment,getAppointments, getAppointment,updateAppointment,
+  deleteAppointment, sendInvite, getStudentAppointments,getStaffAppointments
 } from "../controllers/appointmentController.js";
 
-const appointmentRouter = Router()
+const AppointmentRouter = Router();
+AppointmentRouter.post('/create', createAppointment);
+AppointmentRouter.get('/', getAppointments);
+AppointmentRouter.get('/:id', getAppointment);
+AppointmentRouter.patch('/:id', updateAppointment);
+AppointmentRouter.delete('/:id', deleteAppointment);
+AppointmentRouter.post('/:id/send-invite', sendInvite);
+AppointmentRouter.get('/student/:studentId', getStudentAppointments);
+AppointmentRouter.get('/staff/:staffId', getStaffAppointments);
 
-appointmentRouter.get('/', getAppointments)
-appointmentRouter.get('/:id', getAppointment)
-appointmentRouter.post('/create', createAppointment)
-appointmentRouter.patch('/:id', updateAppointment)
-appointmentRouter.delete('/:id', deleteAppointment)
-appointmentRouter.post('/:id/send-invite', sendInvite)
-
-export default appointmentRouter
+export default AppointmentRouter;
