@@ -18,6 +18,10 @@ const AdminSchema = new mongoose.Schema({
       message: 'Invalid linkedin account'
     },
   },
+  address: {
+    type: String,
+    minLength: 5
+  },
   profileImage: {
     type: String
   }

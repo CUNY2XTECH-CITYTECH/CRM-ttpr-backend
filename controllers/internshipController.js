@@ -4,6 +4,7 @@ import Internship from '../models/Internship.js'
 import { catchAsync } from '../utils/commonFunctions.js'
 
 export const createInternship = catchAsync(async(req, res, next) => {
+  console.log(req.body)
   // check if internship with same position at same company already exists
   const exist = await Internship.find({
     company: req.body.company,

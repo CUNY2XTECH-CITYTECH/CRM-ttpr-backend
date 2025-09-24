@@ -8,7 +8,8 @@ const internshipSchema = new mongoose.Schema({
     required: true
   },
   position: {
-    type: String,
+    type: [String],
+    ref: 'Position',
     required: true
   },
   salary: {

@@ -6,7 +6,7 @@ export const createPosition = catchAsync(async (req, res, next) => {
         title: req.body.name.toLowerCase()
     });
     if (exist.length === 0) {
-        const position = await Position.create({name: req.body.title.toLowerCase()});
+        const position = await Position.create({name: req.body.name.toLowerCase()});
         console.log('created position', position);
         res.status(200).json({
             positions: position

@@ -15,8 +15,12 @@ import IndustryRouter from './routes/industryRoute.js'
 import StateRouter from './routes/stateRouter.js'
 import CityRouter from './routes/CityRoute.js'
 import PositionRouter from './routes/positionRoute.js'
-import { emailRoute } from './routes/emailRoute.js'import interestRouter from './routes/interestRoute.js'
+import { emailRoute } from './routes/emailRoute.js'
+import interestRouter from './routes/interestRoute.js'
 
+import StudentRouter from './routes/studentRoute.js'
+import MajorRouter from './routes/majorRoute.js'
+// import AppointmentRouter from './routes/appointmentRoute.js'
 const app = express()
 dotenv.config()
 const port = process.env.PORT
@@ -41,6 +45,9 @@ app.use('/api/position', checkToken, PositionRouter)
 app.use('/api/cities', CityRouter)
 app.use('/api/states', StateRouter)
 app.use('/api/email', checkToken, emailRoute)
+app.use('/api/studentProfile', checkToken, StudentRouter)
+app.use('/api/,major', checkToken, MajorRouter)
+// app.use('/api/appointment', checkToken,AppointmentRouter)
 // app.use('/api/email',checkToken,emailRoute)
 app.listen(port, () => {
 
